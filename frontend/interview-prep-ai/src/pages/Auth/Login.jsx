@@ -36,16 +36,16 @@ const Login = ({ setCurrentPage }) => {
           type="password"
         />
 
-        {error && <p className=""> {error}</p>}
+        {error && <p className="text-red-500"> {error}</p>}
 
         <button 
           type = "submit"
           className="btn-primary"
         >
-          Login
+          LOG IN
         </button>
 
-        <p className="text-center">
+        <p className="text-center text-slate-800">
           Don't have an account? 
           <span className="text-orange-600 hover:underline cursor-pointer" onClick = {() => setCurrentPage("signup")}> Signup</span> 
         </p>
