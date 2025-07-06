@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import {LuSparkles} from "react-icons/lu";
 import Modal from "../components/Modal";
 import Login from "./Auth/Login";
+import Signup from "./Auth/Signup";
 
 const LandingPage = () => {
   const navigate = useNavigate();
@@ -84,7 +85,7 @@ const LandingPage = () => {
           </div>
           <div className="max-w-[1200px] mx-auto">
             {APP_FEATURES.map((f, index) => (
-              <div className="flex flex-col px-10 py-6 bg-white rounded-lg shadow-md shadow-amber-100 mb-8 border border-amber-200 md:text-center text-left hover:shadow-amber-200">
+              <div key={index} className="flex flex-col px-10 py-6 bg-white rounded-lg shadow-md shadow-amber-100 mb-8 border border-amber-200 md:text-center text-left hover:shadow-amber-200">
                 <div className="text-xl font-semibold mb-4 md:text-2xl">{f.title}</div>
                 <div className="text-base md:text-lg">{f.description}</div>
               </div>
