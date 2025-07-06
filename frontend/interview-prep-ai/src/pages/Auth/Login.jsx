@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Input from "../../components/Inputs/Input"
+import {validateEmail} from "../../utils/helper"
 
 const Login = ({ setCurrentPage }) => {
   const [email, setEmail] = useState("");
@@ -11,7 +12,37 @@ const Login = ({ setCurrentPage }) => {
 
   const handleLogin = async (e) => {
     e.preventDefault();
+
+    if (!email || !password) {
+      setError("Please fill out all fields")
+      return;
+    }
+    
+    if (!validateEmail(email)) {
+      setError("Please enter a valid email address")
+      return;
+    }
+    
+    if (password.length < 8) {
+      setError("Password must be at least 8 characters long")
+      return;
+    }
+ 
+    setError("");
+
+    //Login API call
+    try {
+
+    } catch (e) {
+      if (e.response || e.response.data.message) {
+        setError(e.response.data.message)
+    } else {
+        setError("Something went wrong. Please try again.")
+    }
   }
+}
+
+
   return (
     <div className="w-[90vw] md:w-[33vw] p-7 flex flex-col justify-center">
       <h3 className="text-2xl font-semibold">Welcome Back</h3>

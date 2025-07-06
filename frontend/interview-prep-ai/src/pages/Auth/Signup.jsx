@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import Input from "../../components/Inputs/Input"
 import { useNavigate } from "react-router-dom";
-
-
+import {validateEmail} from "../../utils/helper"
 
 const Signup = ({ setCurrentPage }) => {
   const [name, setName] = useState("");
@@ -16,9 +15,33 @@ const Signup = ({ setCurrentPage }) => {
     e.preventDefault();
   
     if (!name || !email || !password) {
-      setError("Please fill in all fields!")
+      setError("Please fill out all fields!")
+      return;
+    }
+
+    if (!validateEmail(email)) {
+      setError("Please enter a valid email address")
+      return;
+    }
+    
+    if (password.length < 8) {
+      setError("Password must be at least 8 characters long")
+      return;
+    }
+ 
+    setError("");
+
+    //Signup API call
+    try {
+
+    } catch (e) {
+      if (e.response || e.response.data.message) {
+        setError(e.response.data.message)
+    } else {
+        setError("Something went wrong. Please try again.")
     }
   }
+}
 
   return (
     <div className="w-[90vw] md:w-[30vw] p-7 flex flex-col justify-center">
