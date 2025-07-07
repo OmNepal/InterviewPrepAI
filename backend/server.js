@@ -13,6 +13,8 @@ app.use(cors({
     allowedHeaders: ["Content-Type", "Authorization"],
 }));
 
+//Connect to MongoDB
+connectDB();
 
 //Middleware to parse JSON bodies
 app.use(express.json());
