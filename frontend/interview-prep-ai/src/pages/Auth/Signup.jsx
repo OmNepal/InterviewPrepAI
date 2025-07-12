@@ -1,7 +1,10 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import Input from "../../components/Inputs/Input"
 import { useNavigate } from "react-router-dom";
 import {validateEmail} from "../../utils/helper"
+import axiosInstance from "../../utils/axiosInstance";
+import { UserContext } from "../../context/userContext";
+import { API_PATHS } from "../../utils/apiPaths";
 
 const Signup = ({ setCurrentPage }) => {
   const [name, setName] = useState("");
@@ -9,9 +12,11 @@ const Signup = ({ setCurrentPage }) => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
+  const {updateUser} = useContext(UserContext);
+
   const navigate = useNavigate();
 
-  const handleSignup = (e) => {
+  const handleSignup = async (e) => {
     e.preventDefault();
   
     if (!name || !email || !password) {
@@ -33,7 +38,19 @@ const Signup = ({ setCurrentPage }) => {
 
     //Signup API call
     try {
+        const response = await axiosInstance.post(API_PATHS.AUTH.REGISTER, {
+          name,
+          email, 
+          password
+        })
 
+        const {token} = response.data;
+
+        if (token) {
+          localStorage.setItem("token", token),
+          updateUser(response.data)
+          navigate('/dashboard')
+        }
     } catch (e) {
       if (e.response || e.response.data.message) {
         setError(e.response.data.message)
