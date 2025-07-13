@@ -56,7 +56,7 @@ const CreateSessionForm = () => {
             })
 
             if (response.data?.session?._id) {
-                navigate(`/interview  -prep/${response.data?.session?._id}`);
+                navigate(`/interview-prep/${response.data?.session?._id}`);
             }
         } catch (error) {
             if (error.response && error.response.data.message) {
