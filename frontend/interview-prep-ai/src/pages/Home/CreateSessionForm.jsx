@@ -3,6 +3,7 @@ import Input from "../../components/Inputs/Input";
 import axiosInstance from "../../utils/axiosInstance";
 import { API_PATHS } from "../../utils/apiPaths";
 import { useNavigate } from "react-router-dom";
+import SpinnerLoader from "../../components/Loader/SpinnerLoader";
 
 const CreateSessionForm = () => {
     const [formData, setFormData] = useState({
@@ -35,6 +36,37 @@ const CreateSessionForm = () => {
         }
 
         setError("")
+        setIsLoading(true);
+
+        try {
+            //Call AI API to generate questions
+            const aiResponse = await axiosInstance.post(API_PATHS.AI.GENERATE_QUESTIONS, {
+                role,
+                experience,
+                topicsToFocus, 
+                numberOfQuestions: 10,
+            })
+
+            //Should be array like [{question, answer}, ...]
+            const generatedQuestions = aiResponse.data;
+
+            const response = await axiosInstance.post(API_PATHS.SESSION.CREATE, {
+                ...formData,
+                questions: generatedQuestions
+            })
+
+            if (response.data?.session?._id) {
+                navigate(`/interview  -prep/${response.data?.session?._id}`);
+            }
+        } catch (error) {
+            if (error.response && error.response.data.message) {
+                setError(error.response.data.message)
+            } else {
+                setError("Something went wrong")
+            }
+        } finally {
+            setIsLoading(false);
+        }
     }
 
     return (
@@ -63,14 +95,14 @@ const CreateSessionForm = () => {
                 />
                 <Input
                     value={formData.experience}
-                    onChange={({target}) => setRole("experience", target.value)}
+                    onChange={({target}) => handleChange("experience", target.value)}
                     label="Years of Experience"
                     placeholder="Eg: 1 year, 3years"
-                    type="number"
+                    type="text"
                 />
                 <Input
                     value={formData.description}
-                    onChange={({target}) => setRole("description", target.value)}
+                    onChange={({target}) => handleChange("description", target.value)}
                     label="Short Description"
                     placeholder="Any notes for this session (Optional)"
                     type="text"
