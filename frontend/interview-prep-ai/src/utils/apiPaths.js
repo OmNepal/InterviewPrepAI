@@ -12,7 +12,7 @@ export const API_PATHS = {
     },
     SESSION: {
         CREATE: "/api/sessions/create", //Create a new interview session with questions
-        GET_ALL: "api/sessions/my-sessions", //Get all sessions for the user
+        GET_ALL: "/api/sessions/my-sessions", //Get all sessions for the user
         GET_ONE: (id) => `/api/sessions/${id}`, //Get session details for a session id
         DELETE: (id) => `/api/sessions/${id}` //Delete a session based on session id
     },
