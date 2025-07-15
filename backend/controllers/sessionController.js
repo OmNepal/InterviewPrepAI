@@ -67,7 +67,7 @@ const getSessionById = async(req, res) => {
         const session = await Session.findById(sessionId)
             .populate({
                 path: "questions",
-                options: {sort: {isPlanned: -1, createdAt: 1}},
+                options: {sort: {isPinned: -1, createdAt: 1}}, //we are sorting such that pinned questions appear first over unpinned ones
             })
             .exec();
 
