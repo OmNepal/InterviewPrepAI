@@ -113,6 +113,7 @@ function CodeBlock({code, language}) {
     const [copied, setCopied] = useState(false);
 
     const copyCode = () => {
+        //on clicking the copy button, we write the copied code to the clipboard of the user's device
         navigator.clipboard.writeText(code);
         setCopied(true);
         setTimeout(() => setCopied(false), 2000)

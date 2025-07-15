@@ -43,7 +43,18 @@ const InterviewPrep = () => {
 
   // Pin question
   const toggleQuestionPinStatus = async (questionId) => {
+    try {
+      const response = await axiosInstance.post(API_PATHS.QUESTION.PIN(questionId))
 
+      console.log(response)
+
+      if (response.data && response.data.question) {
+        //toast.success('Question pinned successfully')
+        fetchSessionDetailsById();
+      }
+    } catch (error) {
+      console.error("Error: ", error)
+    }
   }
 
   //Add more questions to a session
