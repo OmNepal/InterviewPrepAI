@@ -10,6 +10,9 @@ import RoleInfoHeader from "./components/RoleInfoHeader";
 import axiosInstance from "../../utils/axiosInstance";
 import { API_PATHS } from "../../utils/apiPaths";
 import QuestionCard from "../../components/Cards/QuestionCard";
+import AIResponsePreview from "./components/AIResponsePreview";
+import Drawer from "../../components/Drawer";
+import SkeletonLoader from "../../components/Loader/SkeletonLoader";
 
 const InterviewPrep = () => {
   const {sessionId} = useParams();
@@ -38,7 +41,30 @@ const InterviewPrep = () => {
 
   // generate concept explanation
   const generateConceptExplanation = async (question) => {
+    try {
+      setErrorMsg("");
+      setExplanation(null)
 
+      setIsLoading(true)
+      setOpenLearnMoreDrawer(true)
+
+      const response = await axiosInstance.post(
+        API_PATHS.AI.GENERATE_EXPLANATION,
+        {
+          question
+        }
+      )
+
+      if (response.data) {
+        setExplanation(response.data)
+      } 
+    } catch (error) {
+      setExplanation(null)
+      setErrorMsg("Failed to generate explanation, Try Again later")
+      console.error("Error: ", error)
+    } finally {
+      setIsLoading(false);
+    }
   }
 
   // Pin question
@@ -59,7 +85,32 @@ const InterviewPrep = () => {
 
   //Add more questions to a session
   const uploadMoreQuestions = async () => {
+    try{
+      setIsUpdateLoader(true);
 
+      const aiResponse = await axiosInstance.post(API_PATHS.AI.GENERATE_QUESTIONS, {
+        role: sessionData?.role,
+        experience: sessionData?.experience,
+        topicsToFocus: sessionData?.topicsToFocus,
+        numberOfQuestions: 5,
+      })
+
+      const questions = aiResponse.data;
+
+      const response = await axiosInstance.post(API_PATHS.QUESTION.ADD_TO_SESSION, {
+        sessionId,
+        questions: questions,
+      })
+
+      if (response.data) {
+        toast.success("More Q&A Added!");
+        fetchSessionDetailsById();
+      }
+    } catch(error) {
+      setErrorMsg("Couldn't add more questions. Try again later.")
+    } finally {
+      setIsUpdateLoader(false);
+    }
   }
 
   useEffect(() => {
@@ -117,13 +168,49 @@ const InterviewPrep = () => {
                         isPinned={data?.isPinned}
                         onTogglePin={() => toggleQuestionPinStatus(data._id)}
                       />
-                    </>
+
+                    {!isLoading &&
+                      sessionData?.questions?.length == index + 1  && (
+                        <div className="flex item-center justify-center mt-5" >
+                          <button
+                            className="flex items-center gap-3 text-sm text-white font-medium bg-black px-5 py-2 mr-2 rounded text-nowrap cursor-pointer"
+                            disabled={isLoading || isUpdateLoader}
+                            onClick={uploadMoreQuestions}
+                          >
+                            {isUpdateLoader ? (
+                              <SpinnerLoader />
+                            ) : (
+                              <LuListCollapse className="text-lg" />
+                            )} {" "}
+                            Load More
+                          </button>
+                        </div>
+                      )}
+                     </>
                   </motion.div>
                 )
               })}
             </AnimatePresence>
 
           </div>
+        </div>
+
+        <div>
+          <Drawer
+            isOpen={openLearnMoreDrawer}
+            onClose={()=> setOpenLearnMoreDrawer(false)}
+            title={!isLoading && explanation?.title}
+          >
+            {errorMsg && (
+              <p className="flex gap-2 text-sm text-amber-600 font-medium">
+                <LuCircleAlert className="mt-1" /> {errorMsg}
+              </p>
+            )}
+            {isLoading && <SkeletonLoader />}
+            {!isLoading && explanation && (
+              <AIResponsePreview content={explanation?.explanation} />
+            )}
+          </Drawer>
         </div>
       </div>
     </DashboardLayout>

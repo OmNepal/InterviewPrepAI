@@ -8,6 +8,7 @@ exports.addQuestionsToSession = async(req,res) => {
     try {
         const {sessionId, questions} = req.body;
 
+
         if (!sessionId || !questions || !Array.isArray(questions)) {
             return res.status(400).json({message: "Invalid Input Data"})
         }
@@ -23,7 +24,7 @@ exports.addQuestionsToSession = async(req,res) => {
             questions.map((q) => ({
                 session: sessionId,
                 question: q.question,
-                answer: q.anser
+                answer: q.answer
             }))
         );
 
