@@ -7,7 +7,6 @@ const DeleteSessionAlert = ({
 }) => {
     return (
         <div className="p-6">
-            <h1 className="text-xl font-semibold mb-3">Delete the Session</h1>
             <h2 className="text-lg mb-7">Are you sure you want to delete this <span className="italic text-gray-700">{sessionData.role}</span> session?</h2>
             <div></div>
             <div className="flex items-center justify-end gap-6">
