@@ -96,10 +96,11 @@ const InterviewPrep = () => {
       })
 
       const questions = aiResponse.data;
+      
 
       const response = await axiosInstance.post(API_PATHS.QUESTION.ADD_TO_SESSION, {
         sessionId,
-        questions: questions,
+        questions,
       })
 
       if (response.data) {
