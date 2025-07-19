@@ -47,11 +47,13 @@ const Dashboard = () => {
         data:null
       })
 
+      await fetchAllSessions();
+
     } catch (error) {
       console.error("Error: " + error)
     }
     
-    await fetchAllSessions();
+   
   }
 
   useEffect(() => {
@@ -60,7 +62,7 @@ const Dashboard = () => {
   return (
     <DashboardLayout>
      <div className="container mx-auto pt-4 pb-4">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-7 pt-1 pb-6 px-4 md: px-0">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-7 pt-1 pb-6 px-4 md:px-0">
           {sessions?.map((data, index) => (
             <SummaryCard
               key={data?._id}
@@ -110,7 +112,7 @@ const Dashboard = () => {
           data:null
         })
       }}
-      hideHeader
+      title="Delete Session"
      >
       <DeleteSessionAlert 
         sessionData = {openDeleteAlert.data}

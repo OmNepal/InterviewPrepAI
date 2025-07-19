@@ -16,7 +16,7 @@ const Modal = ( {
             {/*Modal Header*/}
               {!hideHeader && (
                 <div className="flex items-center justify-between p-4 border-b border-gray-200">
-                    <h3 className="md:text-lg font-mediun text-gray-900">{title}</h3>
+                    <h3 className="md:text-lg font-mediun text-gray-900 font-semibold">{title}</h3>
                 </div>
               )}
 
