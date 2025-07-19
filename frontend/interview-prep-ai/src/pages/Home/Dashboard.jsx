@@ -10,6 +10,7 @@ import SummaryCard from "../../components/Cards/SummaryCard";
 import moment from "moment"
 import Modal from "../../components/Modal";
 import CreateSessionForm from "./CreateSessionForm";
+import DeleteSessionAlert from "./DeleteSessionAlert";
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -32,7 +33,25 @@ const Dashboard = () => {
   }
 
   const deleteSession = async (sessionData) => {
+    try {
+      const sessionId = sessionData._id;
+      console.log(sessionId)
+      const response = await axiosInstance.delete(API_PATHS.SESSION.DELETE(sessionId));
 
+      if (response.status == 200) {
+        toast.success("Session Deleted Successfully")
+      }
+
+      setOpenDeleteAlert({
+        open:false,
+        data:null
+      })
+
+    } catch (error) {
+      console.error("Error: " + error)
+    }
+    
+    await fetchAllSessions();
   }
 
   useEffect(() => {
@@ -83,6 +102,30 @@ const Dashboard = () => {
       </div>
      </Modal>
 
+     <Modal 
+      isOpen={openDeleteAlert.open}
+      onClose={() => {
+        setOpenDeleteAlert({
+          open:false,
+          data:null
+        })
+      }}
+      hideHeader
+     >
+      <DeleteSessionAlert 
+        sessionData = {openDeleteAlert.data}
+        deleteSession = {() => {
+          deleteSession(openDeleteAlert.data)
+        }}
+        onCancel={() => {
+          setOpenDeleteAlert({
+            open:false,
+            data:null
+          })
+        }}
+      />
+     </Modal>
+      
     </DashboardLayout>
   )
 }
