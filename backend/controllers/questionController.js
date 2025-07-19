@@ -8,7 +8,7 @@ exports.addQuestionsToSession = async(req,res) => {
     try {
         const {sessionId, questions} = req.body;
 
-
+        
         if (!sessionId || !questions || !Array.isArray(questions)) {
             return res.status(400).json({message: "Invalid Input Data"})
         }
@@ -29,7 +29,9 @@ exports.addQuestionsToSession = async(req,res) => {
         );
 
         //Update session to include new question IDs
-        session.questions.push(createdQuestions.map((q) => q._id))
+        const questionIds = createdQuestions.map((q) => q._id); 
+        session.questions.push(...questionIds);
+  
         await session.save();
 
         res.status(201).json({createdQuestions});
