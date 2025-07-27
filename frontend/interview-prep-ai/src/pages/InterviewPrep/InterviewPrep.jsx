@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import moment from "moment";
 import {AnimatePresence, motion} from "framer-motion"
-import { LuCircleAlert, LuListCollapse } from "react-icons/lu";
+import { LuCircleAlert, LuListCollapse, LuNotebookPen } from "react-icons/lu";
 import SpinnerLoader from "../../components/Loader/SpinnerLoader";
 import toast from "react-hot-toast";
 import DashboardLayout from "../../components/Layouts/DashboardLayout";
@@ -22,6 +22,9 @@ const InterviewPrep = () => {
 
   const [openLearnMoreDrawer, setOpenLearnMoreDrawer] = useState(false)
   const [explanation, setExplanation] = useState(null)
+
+  const [openAddNotesDrawer, setOpenAddNotesDrawer] = useState(false)
+  const [notes, setNotes] = useState(null);
 
   const [isLoading, setIsLoading] = useState(false)
   const [isUpdateLoader, setIsUpdateLoader] = useState(false)
@@ -114,6 +117,10 @@ const InterviewPrep = () => {
     }
   }
 
+  const handleAddNotes = () => {
+    setOpenAddNotesDrawer(true);
+  }
+
   useEffect(() => {
     if (sessionId) {
       fetchSessionDetailsById();
@@ -136,11 +143,27 @@ const InterviewPrep = () => {
       />
 
       <div className="container mx-auto pt-4 pb-4 px-4 md:px-3">
-        <h2 className="text-lg font-semibold color-black">Interview Q & A</h2>
+      <div className="flex justify-center grid grid-cols-12 ">
+        <h2 className="text-lg font-semibold color-black col-span-6 md:col-span-5">Interview Q & A</h2>
+        
+        <button 
+          className={`cursor-pointer col-span-6 ${
+              openLearnMoreDrawer ? "md:col-span-3" : "md:col-span-5"
+            }
+            ${
+              openAddNotesDrawer ? "hidden" : ""
+            }
+          `}
+          onClick={handleAddNotes}
+        >
+            <LuNotebookPen  className="text-xl inline rounded"/>
+            Add Notes
+        </button>
+      </div>
 
         <div className="grid grid-cols-12 gap-4 mt-5 mb-10">
           <div className={`col-span-12 ${
-            openLearnMoreDrawer ? "md:col-span-7" : "md:col-span-8"
+            openLearnMoreDrawer || openAddNotesDrawer ? "md:col-span-7" : "md:col-span-8"
             }`}
           >
             <AnimatePresence>
@@ -211,6 +234,16 @@ const InterviewPrep = () => {
             {!isLoading && explanation && (
               <AIResponsePreview content={explanation?.explanation} />
             )}
+          </Drawer>
+        </div>
+
+        <div>
+          <Drawer
+            isOpen={openAddNotesDrawer}
+            title="Add Notes for this session"
+            onClose={() => setOpenAddNotesDrawer(false)}
+          >
+
           </Drawer>
         </div>
       </div>

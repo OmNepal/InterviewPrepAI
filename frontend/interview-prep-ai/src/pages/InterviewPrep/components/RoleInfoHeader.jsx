@@ -36,7 +36,7 @@ const RoleInfoHeader = ({
 
                         <div className="text-[10px] font-semibold text-white bg-black px-3 py-1 rounded-full">
                             Last Updated: {lastUpdated}
-                        </div>
+                        </div>                   
                     </div>
                 </div>
 
