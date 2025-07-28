@@ -243,7 +243,15 @@ const InterviewPrep = () => {
             title="Add Notes for this session"
             onClose={() => setOpenAddNotesDrawer(false)}
           >
-
+            <form action="" className="flex flex-col items-center justify-center">
+              <textarea name="" id="" 
+                placeholder="Add your notes here..."
+                className="w-full h-full border p-2"
+              />        
+              <button className=" w-16 btn-primary">
+                Save
+              </button>
+            </form>
           </Drawer>
         </div>
       </div>
