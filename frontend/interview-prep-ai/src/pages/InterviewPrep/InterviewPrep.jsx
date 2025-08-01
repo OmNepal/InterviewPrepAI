@@ -24,7 +24,7 @@ const InterviewPrep = () => {
   const [explanation, setExplanation] = useState(null)
 
   const [openAddNotesDrawer, setOpenAddNotesDrawer] = useState(false)
-  const [notes, setNotes] = useState(null);
+  const [notes, setNotes] = useState("");
 
   const [isLoading, setIsLoading] = useState(false)
   const [isUpdateLoader, setIsUpdateLoader] = useState(false)
@@ -121,11 +121,35 @@ const InterviewPrep = () => {
     setOpenAddNotesDrawer(true);
   }
 
+  const saveNotes = async (e) => {
+    e.preventDefault();    
+    const notes = (e.target.notes.value)
+    setNotes(notes);
+
+    try {
+      const response = await axiosInstance.post(API_PATHS.SESSION.UPDATE_NOTE(sessionId), { notes })
+      if (response.data.session) {
+        toast.success("Notes Saved Successfully")
+        setNotes(response.data.session.notes)
+      }
+    } catch (error) {
+      console.log("Something went wrong: ", error)
+    }
+    
+  }
+
   useEffect(() => {
     if (sessionId) {
       fetchSessionDetailsById();
     }
+    
   }, [])
+
+  //set notes everytime session data changes
+  useEffect (() => {
+    if (sessionData)
+      setNotes(sessionData.notes)
+  }, [sessionData])
 
   return (
     <DashboardLayout>
@@ -243,7 +267,19 @@ const InterviewPrep = () => {
             title="Add Notes for this session"
             onClose={() => setOpenAddNotesDrawer(false)}
           >
-
+            <form onSubmit={saveNotes} className="flex flex-col items-center justify-center">
+              <textarea 
+                name="notes" 
+                id="notes"
+                value={notes}
+                onChange={(e) => setNotes(e.target.value)}
+                placeholder="Add your notes here..."
+                className="w-full min-h-[calc(100vh-12rem)] border p-2"
+              />        
+              <button className=" w-16 btn-primary">
+                Save
+              </button>
+            </form>
           </Drawer>
         </div>
       </div>
