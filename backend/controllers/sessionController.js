@@ -16,6 +16,7 @@ const createSession = async(req, res) => {
             experience, 
             topicsToFocus,
             description,
+            notes: ""
         });
 
         const questionDocs = await Promise.all(
