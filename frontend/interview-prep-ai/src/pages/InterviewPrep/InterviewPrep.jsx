@@ -24,7 +24,7 @@ const InterviewPrep = () => {
   const [explanation, setExplanation] = useState(null)
 
   const [openAddNotesDrawer, setOpenAddNotesDrawer] = useState(false)
-  const [notes, setNotes] = useState(null);
+  const [notes, setNotes] = useState("");
 
   const [isLoading, setIsLoading] = useState(false)
   const [isUpdateLoader, setIsUpdateLoader] = useState(false)
@@ -121,10 +121,20 @@ const InterviewPrep = () => {
     setOpenAddNotesDrawer(true);
   }
 
+  const saveNotes = (e) => {
+    e.preventDefault();    
+    sessionData.notes = (e.target.notes.value)
+    setNotes(sessionData.notes)
+
+    console.log(sessionData)
+  }
+
   useEffect(() => {
     if (sessionId) {
       fetchSessionDetailsById();
     }
+    if (sessionData)
+      setNotes(sessionData.notes || "")
   }, [])
 
   return (
@@ -243,10 +253,14 @@ const InterviewPrep = () => {
             title="Add Notes for this session"
             onClose={() => setOpenAddNotesDrawer(false)}
           >
-            <form action="" className="flex flex-col items-center justify-center">
-              <textarea name="" id="" 
+            <form onSubmit={saveNotes} className="flex flex-col items-center justify-center">
+              <textarea 
+                name="notes" 
+                id="notes"
+                value={notes || ""}
+                onChange={(e) => setNotes(e.target.value)}
                 placeholder="Add your notes here..."
-                className="w-full h-full border p-2"
+                className="w-full min-h-[calc(100vh-12rem)] border p-2"
               />        
               <button className=" w-16 btn-primary">
                 Save
