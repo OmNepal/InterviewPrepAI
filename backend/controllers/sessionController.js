@@ -97,7 +97,7 @@ const deleteSession = async(req, res) => {
 
         //Check if the logged in user owns this session
         if (session.user.toString() !== req.user.id) {
-            return res.status(401).json({message: "Not authorized to delte this sessions"})
+            return res.status(401).json({message: "Not authorized to delete this sessions"})
         }
 
         //First delete all the questions linked to this session
@@ -113,5 +113,25 @@ const deleteSession = async(req, res) => {
     }
 }
 
+const updateSessionNote = async (req, res) => {
+    try {
+        const sessionId = req.params.id
+        const notes = req.body.notes;
 
-module.exports = {createSession, getMySessions, getSessionById, deleteSession}
+        const session = await Session.findById(sessionId);
+
+        if (!session) {
+            return res.status(500).json({message: "Session not found"})
+        }
+
+        session.notes = notes;
+        await session.save();
+
+        res.status(200).json({success: true, message: "Notes Saved Successfully", session})
+    } catch (error) {
+        res.status(500).json({message: "Something went wrong", error: error.message})
+    }
+}
+
+
+module.exports = {createSession, getMySessions, getSessionById, deleteSession, updateSessionNote}
