@@ -121,21 +121,35 @@ const InterviewPrep = () => {
     setOpenAddNotesDrawer(true);
   }
 
-  const saveNotes = (e) => {
+  const saveNotes = async (e) => {
     e.preventDefault();    
-    sessionData.notes = (e.target.notes.value)
-    setNotes(sessionData.notes)
+    const notes = (e.target.notes.value)
+    setNotes(notes);
 
-    console.log(sessionData)
+    try {
+      const response = await axiosInstance.post(API_PATHS.SESSION.UPDATE_NOTE(sessionId), { notes })
+      if (response.data.session) {
+        toast.success("Notes Saved Successfully")
+        setNotes(response.data.session.notes)
+      }
+    } catch (error) {
+      console.log("Something went wrong: ", error)
+    }
+    
   }
 
   useEffect(() => {
     if (sessionId) {
       fetchSessionDetailsById();
     }
-    if (sessionData)
-      setNotes(sessionData.notes || "")
+    
   }, [])
+
+  //set notes everytime session data changes
+  useEffect (() => {
+    if (sessionData)
+      setNotes(sessionData.notes)
+  }, [sessionData])
 
   return (
     <DashboardLayout>
@@ -257,7 +271,7 @@ const InterviewPrep = () => {
               <textarea 
                 name="notes" 
                 id="notes"
-                value={notes || ""}
+                value={notes}
                 onChange={(e) => setNotes(e.target.value)}
                 placeholder="Add your notes here..."
                 className="w-full min-h-[calc(100vh-12rem)] border p-2"
