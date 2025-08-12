@@ -138,6 +138,10 @@ const InterviewPrep = () => {
     
   }
 
+  const handleWrittenPractice = () => {
+    console.log("Written Practice")
+  }
+
   useEffect(() => {
     if (sessionId) {
       fetchSessionDetailsById();
@@ -164,6 +168,7 @@ const InterviewPrep = () => {
           ? moment(sessionData.updatedAt).format("Do MMM YYYY")
           : ""
         }
+        handleWrittenPractice={handleWrittenPractice}
       />
 
       <div className="container mx-auto pt-4 pb-4 px-4 md:px-3">
