@@ -6,7 +6,8 @@ const RoleInfoHeader = ({
     experience,      
     questions,
     description, 
-    lastUpdated
+    lastUpdated,
+    handleWrittenPractice,
 }) => {
     return (
         <div className="bg-white relative">
@@ -41,7 +42,9 @@ const RoleInfoHeader = ({
                 </div>
 
                 <div className="flex flex-col sm:flex-row gap-4 md:gap-6 w-full md:w-auto mb-6 md:mb-0">
-                    <button className="flex flex-col justify-center z-20 bg-black/20 backdrop-blur-md border border-black/30 text-sm font-semibold text-black px-6 md:px-8 py-2.5 md:py-3 rounded-full hover:bg-black hover:text-white transition-all duration-300 cursor-pointer hover:shadow-2xl hover:shadow-black/20 md:relative shadow-lg">
+                    <button 
+                        onClick={handleWrittenPractice}
+                        className="flex flex-col justify-center z-20 bg-black/20 backdrop-blur-md border border-black/30 text-sm font-semibold text-black px-6 md:px-8 py-2.5 md:py-3 rounded-full hover:bg-black hover:text-white transition-all duration-300 cursor-pointer hover:shadow-2xl hover:shadow-black/20 md:relative shadow-lg">
                        Written Practice
                     </button>
 
