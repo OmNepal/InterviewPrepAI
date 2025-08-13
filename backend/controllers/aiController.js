@@ -79,4 +79,20 @@ const generateConceptExplanation = async (req, res) => {
     }
 }
 
+const checkAnswers = async (req, res) => {
+    try {
+        const {qsnAnsObject} = req.body
+
+        if (!qsnAnsObject) {
+            res.status(404).json({message: "Question & Answers Not Found!"})
+        }
+
+    } catch (error) {
+        res.status(500).json({
+            message: "Failed to check answers",
+            error: error.message
+        })
+    }
+}
+
 module.exports = {generateInterviewQuestions, generateConceptExplanation}

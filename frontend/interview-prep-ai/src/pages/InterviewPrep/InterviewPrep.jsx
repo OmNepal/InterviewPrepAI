@@ -149,11 +149,11 @@ const InterviewPrep = () => {
 
     const answers = e.target.ans
 
-    const object  = {}
-    sessionData.questions.forEach((e, i) => {
-      object[e.question] = answers[i].value
+    const qsnAnsObject  = {}
+    sessionData.questions.forEach((q, i) => {
+      qsnAnsObject[q.question] = answers[i].value
     })
-    console.log(JSON.stringify(object))
+    console.log((qsnAnsObject))
   }
 
   useEffect(() => {
@@ -308,6 +308,7 @@ const InterviewPrep = () => {
             onClose={() => setOpenWrittenPracticeDrawer(false)}
             title="Written Q&A Practice"
           >
+            <p className="font-semibold">Answer the questions and get feedback from AI</p>
             <form onSubmit={handleWrittenPracticeSubmit}>
               {sessionData?.questions?.map((q, i) => {
                 return (
