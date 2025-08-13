@@ -27,6 +27,8 @@ const InterviewPrep = () => {
   const [notes, setNotes] = useState("");
 
   const [openWrittenPracticeDrawer, setOpenWrittenPracticeDrawer] = useState(false)
+  const [feedback, setFeedback] = useState({})
+  const [topicsToFocus, setTopicsToFocus] = useState()
 
   const [isLoading, setIsLoading] = useState(false)
   const [isUpdateLoader, setIsUpdateLoader] = useState(false)
@@ -159,12 +161,15 @@ const InterviewPrep = () => {
     try {
       const response = await axiosInstance.post(API_PATHS.AI.CHECK_ANSWERS, {qsnAnsObject})
 
-      console.log(response)
+      const data = response.data;
+      console.log(data)
+
+      setFeedback(data.feedback)
+      setTopicsToFocus(data.topicsToFocus)
+
     } catch (error) {
       console.log ("Something went wrong")
     }
-
-
   }
 
   useEffect(() => {
@@ -333,11 +338,25 @@ const InterviewPrep = () => {
                       className="border block w-full p-2 mt-2 rounded" 
                       placeholder="Answer"
                     />
+                    {feedback && (
+                      <p className="font-calibri text-orange-500">
+                        {feedback[q.question]}
+                      </p>
+                      )}
                   </div>
                 )
               })}
 
-              <button className="btn-primary" type="submit">Submit Answers</button>
+              {topicsToFocus && (   
+                <div>
+                  <p className="font-calibri text-orange-500 font-semibold">Topics To Focus: </p>
+                  <ul className="list-disc pl-5">
+                    {topicsToFocus.map(t => <li className="p-2">{t}</li>)}
+                  </ul>
+
+                </div>
+              )}
+              {!feedback && <button className="btn-primary" type="submit">Submit Answers</button>}
             </form>
 
           </Drawer>
