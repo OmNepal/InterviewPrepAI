@@ -26,6 +26,10 @@ const InterviewPrep = () => {
   const [openAddNotesDrawer, setOpenAddNotesDrawer] = useState(false)
   const [notes, setNotes] = useState("");
 
+  const [openWrittenPracticeDrawer, setOpenWrittenPracticeDrawer] = useState(false)
+  const [feedback, setFeedback] = useState()
+  const [topicsToFocus, setTopicsToFocus] = useState()
+
   const [isLoading, setIsLoading] = useState(false)
   const [isUpdateLoader, setIsUpdateLoader] = useState(false)
 
@@ -138,6 +142,36 @@ const InterviewPrep = () => {
     
   }
 
+  const handleWrittenPractice = () => {
+    setOpenWrittenPracticeDrawer(true)
+  }
+
+  const handleWrittenPracticeSubmit = async (e) => {
+    e.preventDefault()
+
+    const answers = e.target.ans
+
+    let qsnAnsObject  = {}
+    sessionData.questions.forEach((q, i) => {
+      qsnAnsObject[q.question] = answers[i].value
+    })
+    
+    qsnAnsObject = JSON.stringify(qsnAnsObject)
+
+    try {
+      const response = await axiosInstance.post(API_PATHS.AI.CHECK_ANSWERS, {qsnAnsObject})
+
+      const data = response.data;
+      console.log(data)
+
+      setFeedback(data.feedback)
+      setTopicsToFocus(data.topicsToFocus)
+
+    } catch (error) {
+      console.log ("Something went wrong")
+    }
+  }
+
   useEffect(() => {
     if (sessionId) {
       fetchSessionDetailsById();
@@ -164,6 +198,7 @@ const InterviewPrep = () => {
           ? moment(sessionData.updatedAt).format("Do MMM YYYY")
           : ""
         }
+        handleWrittenPractice={handleWrittenPractice}
       />
 
       <div className="container mx-auto pt-4 pb-4 px-4 md:px-3">
@@ -175,7 +210,7 @@ const InterviewPrep = () => {
               openLearnMoreDrawer ? "md:col-span-3" : "md:col-span-5"
             }
             ${
-              openAddNotesDrawer ? "hidden" : ""
+              openAddNotesDrawer || openWrittenPracticeDrawer ? "hidden" : ""
             }
           `}
           onClick={handleAddNotes}
@@ -187,7 +222,7 @@ const InterviewPrep = () => {
 
         <div className="grid grid-cols-12 gap-4 mt-5 mb-10">
           <div className={`col-span-12 ${
-            openLearnMoreDrawer || openAddNotesDrawer ? "md:col-span-7" : "md:col-span-8"
+            openLearnMoreDrawer || openAddNotesDrawer || openWrittenPracticeDrawer ? "md:col-span-7" : "md:col-span-8"
             }`}
           >
             <AnimatePresence>
@@ -280,6 +315,55 @@ const InterviewPrep = () => {
                 Save
               </button>
             </form>
+          </Drawer>
+        </div>
+
+        <div>
+          <Drawer
+            isOpen={openWrittenPracticeDrawer}
+            onClose={() => {
+              setOpenWrittenPracticeDrawer(false)
+              setFeedback()
+              setTopicsToFocus()
+            }}
+            title="Written Q&A Practice"
+          >
+            <p className="font-semibold">Answer the questions and get feedback from AI</p>
+            <form onSubmit={handleWrittenPracticeSubmit}>
+              {sessionData?.questions?.map((q, i) => {
+                return (
+                  <div 
+                    key={i}  
+                    className="m-4"
+                  >
+                    <label htmlFor="ans">{i+1}. {q.question}</label>
+                    <textarea 
+                      name="ans"
+                      className="border block w-full p-2 mt-2 rounded" 
+                      placeholder="Answer"
+                    />
+                    {feedback && (
+                      <p className="font-calibri text-orange-500">
+                        {feedback[q.question]}
+                      </p>
+                      )}
+                  </div>
+                )
+              })}
+
+              {topicsToFocus && (   
+                <div>
+                  <p className="font-calibri text-orange-500 font-semibold">Topics To Focus: </p>
+                  <ul className="list-disc pl-5">
+                    {topicsToFocus.map(t => <li className="p-2">{t}</li>)}
+                  </ul>
+
+                  <p className="font-calibri text-orange-500 font-semibold">NOTE: For more information, view the previous AI generated answers</p>
+                </div>
+              )}
+              {!feedback && <button className="btn-primary" type="submit">Submit Answers</button>}
+            </form>
+
           </Drawer>
         </div>
       </div>
