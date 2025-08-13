@@ -27,7 +27,7 @@ const InterviewPrep = () => {
   const [notes, setNotes] = useState("");
 
   const [openWrittenPracticeDrawer, setOpenWrittenPracticeDrawer] = useState(false)
-  const [feedback, setFeedback] = useState({})
+  const [feedback, setFeedback] = useState()
   const [topicsToFocus, setTopicsToFocus] = useState()
 
   const [isLoading, setIsLoading] = useState(false)
@@ -358,6 +358,7 @@ const InterviewPrep = () => {
                     {topicsToFocus.map(t => <li className="p-2">{t}</li>)}
                   </ul>
 
+                  <p className="font-calibri text-orange-500 font-semibold">NOTE: For more information, view the previous AI generated answers</p>
                 </div>
               )}
               {!feedback && <button className="btn-primary" type="submit">Submit Answers</button>}
