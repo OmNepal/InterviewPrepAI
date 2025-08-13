@@ -26,6 +26,8 @@ const InterviewPrep = () => {
   const [openAddNotesDrawer, setOpenAddNotesDrawer] = useState(false)
   const [notes, setNotes] = useState("");
 
+  const [openWrittenPracticeDrawer, setOpenWrittenPracticeDrawer] = useState(false)
+
   const [isLoading, setIsLoading] = useState(false)
   const [isUpdateLoader, setIsUpdateLoader] = useState(false)
 
@@ -139,7 +141,19 @@ const InterviewPrep = () => {
   }
 
   const handleWrittenPractice = () => {
-    console.log("Written Practice")
+    setOpenWrittenPracticeDrawer(true)
+  }
+
+  const handleWrittenPracticeSubmit = (e) => {
+    e.preventDefault()
+
+    const answers = e.target.ans
+
+    const object  = {}
+    sessionData.questions.forEach((e, i) => {
+      object[e.question] = answers[i].value
+    })
+    console.log(JSON.stringify(object))
   }
 
   useEffect(() => {
@@ -285,6 +299,30 @@ const InterviewPrep = () => {
                 Save
               </button>
             </form>
+          </Drawer>
+        </div>
+
+        <div>
+          <Drawer
+            isOpen={openWrittenPracticeDrawer}
+            onClose={() => setOpenWrittenPracticeDrawer(false)}
+            title="Written Q&A Practice"
+          >
+            <form onSubmit={handleWrittenPracticeSubmit}>
+              {sessionData?.questions?.map((q, i) => {
+                return (
+                  <div 
+                    key={i}  
+                  >
+                    <label htmlFor="ans">{q.question}</label>
+                    <textarea name="ans"></textarea>
+                  </div>
+                )
+              })}
+
+              <button type="submit">Submit Answers</button>
+            </form>
+
           </Drawer>
         </div>
       </div>
