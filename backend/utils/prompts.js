@@ -39,4 +39,24 @@ const questionAnswerPrompt = (role, experience, topicsToFocus, numberOfQuestions
         Important: Do NOT add any extra text. Only return valid JSON.  
     `)
 
-    module.exports = {questionAnswerPrompt, conceptExplainPrompt}
+    const checkAnswersPrompt = (qsnAnsObject) => (`
+        You are an AI that will give feedback to a user's answers to some interview questions.
+
+        Task:
+        - You will get a JSON object which contains questions as the keys and the user's answers to those questions as the values
+        - JSON Q&A Object: "${qsnAnsObject}"
+        - Check the user's answers to the questions and give feedback to the answers in 2-3 sentences. 
+        - Highlight what the user got correct and what they got wrong
+        - If the answer is empty, just return 'You did not answer'
+        - After checking all the answers, also give the user a list of topics that they should focus on based on their answers
+        - Kepp the formatting very clean and clear.
+        - Return the result as a valid JSON object in the following format: 
+        {
+            "feedback": JSON object (key: question, value: feedback)
+            "topicsToFocus": Array of topics
+        }
+
+        Important: Do NOT add any extra text. Only return valid JSON.  
+    `)
+
+    module.exports = {questionAnswerPrompt, conceptExplainPrompt, checkAnswersPrompt}
