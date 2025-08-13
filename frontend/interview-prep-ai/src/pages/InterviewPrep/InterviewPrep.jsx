@@ -144,16 +144,27 @@ const InterviewPrep = () => {
     setOpenWrittenPracticeDrawer(true)
   }
 
-  const handleWrittenPracticeSubmit = (e) => {
+  const handleWrittenPracticeSubmit = async (e) => {
     e.preventDefault()
 
     const answers = e.target.ans
 
-    const qsnAnsObject  = {}
+    let qsnAnsObject  = {}
     sessionData.questions.forEach((q, i) => {
       qsnAnsObject[q.question] = answers[i].value
     })
-    console.log((qsnAnsObject))
+    
+    qsnAnsObject = JSON.stringify(qsnAnsObject)
+
+    try {
+      const response = await axiosInstance.post(API_PATHS.AI.CHECK_ANSWERS, {qsnAnsObject})
+
+      console.log(response)
+    } catch (error) {
+      console.log ("Something went wrong")
+    }
+
+
   }
 
   useEffect(() => {
