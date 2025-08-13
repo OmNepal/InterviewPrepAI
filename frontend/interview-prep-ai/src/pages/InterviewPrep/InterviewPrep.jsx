@@ -194,7 +194,7 @@ const InterviewPrep = () => {
               openLearnMoreDrawer ? "md:col-span-3" : "md:col-span-5"
             }
             ${
-              openAddNotesDrawer ? "hidden" : ""
+              openAddNotesDrawer || openWrittenPracticeDrawer ? "hidden" : ""
             }
           `}
           onClick={handleAddNotes}
@@ -206,7 +206,7 @@ const InterviewPrep = () => {
 
         <div className="grid grid-cols-12 gap-4 mt-5 mb-10">
           <div className={`col-span-12 ${
-            openLearnMoreDrawer || openAddNotesDrawer ? "md:col-span-7" : "md:col-span-8"
+            openLearnMoreDrawer || openAddNotesDrawer || openWrittenPracticeDrawer ? "md:col-span-7" : "md:col-span-8"
             }`}
           >
             <AnimatePresence>
@@ -313,14 +313,19 @@ const InterviewPrep = () => {
                 return (
                   <div 
                     key={i}  
+                    className="m-4"
                   >
-                    <label htmlFor="ans">{q.question}</label>
-                    <textarea name="ans"></textarea>
+                    <label htmlFor="ans">{i+1}. {q.question}</label>
+                    <textarea 
+                      name="ans"
+                      className="border block w-full p-2 mt-2 rounded" 
+                      placeholder="Answer"
+                    />
                   </div>
                 )
               })}
 
-              <button type="submit">Submit Answers</button>
+              <button className="btn-primary" type="submit">Submit Answers</button>
             </form>
 
           </Drawer>
