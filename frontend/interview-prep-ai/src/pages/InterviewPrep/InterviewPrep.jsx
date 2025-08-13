@@ -321,7 +321,11 @@ const InterviewPrep = () => {
         <div>
           <Drawer
             isOpen={openWrittenPracticeDrawer}
-            onClose={() => setOpenWrittenPracticeDrawer(false)}
+            onClose={() => {
+              setOpenWrittenPracticeDrawer(false)
+              setFeedback()
+              setTopicsToFocus()
+            }}
             title="Written Q&A Practice"
           >
             <p className="font-semibold">Answer the questions and get feedback from AI</p>
