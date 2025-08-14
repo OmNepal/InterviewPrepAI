@@ -30,6 +30,8 @@ const InterviewPrep = () => {
   const [feedback, setFeedback] = useState()
   const [topicsToFocus, setTopicsToFocus] = useState()
 
+  const [openAudioPracticeDrawer, setOpenAudioPracticeDrawer] = useState(false)
+
   const [isLoading, setIsLoading] = useState(false)
   const [isUpdateLoader, setIsUpdateLoader] = useState(false)
 
@@ -172,6 +174,10 @@ const InterviewPrep = () => {
     }
   }
 
+  const handleAudioPractice = () => {
+    setOpenAudioPracticeDrawer(true)
+  }
+
   useEffect(() => {
     if (sessionId) {
       fetchSessionDetailsById();
@@ -199,6 +205,7 @@ const InterviewPrep = () => {
           : ""
         }
         handleWrittenPractice={handleWrittenPractice}
+        handleAudioPractice={handleAudioPractice}
       />
 
       <div className="container mx-auto pt-4 pb-4 px-4 md:px-3">
@@ -364,6 +371,53 @@ const InterviewPrep = () => {
               {!feedback && <button className="btn-primary" type="submit">Submit Answers</button>}
             </form>
 
+          </Drawer>
+        </div>
+
+        <div>
+          <Drawer
+            isOpen={openAudioPracticeDrawer}
+            onClose={() => {
+              setOpenAudioPracticeDrawer(false)
+            }}
+            title="Q&A Practice with Audio"
+          >
+            <div className="flex flex-col items-center justify-center min-h-[300px] text-center p-8">
+              <div className="bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-full p-4 mb-6">
+                <svg className="w-12 h-12" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clipRule="evenodd" />
+                </svg>
+              </div>
+              
+              <h3 className="text-2xl font-bold text-gray-800 mb-4">
+                Premium Feature
+              </h3>
+              
+              <p className="text-lg text-gray-600 mb-6 max-w-md">
+                Practice Q&A in a conversational audio format with AI-powered voice interaction.
+              </p>
+              
+              <div className="bg-gradient-to-r from-yellow-400 to-orange-400 border-2 border-yellow-300 rounded-xl p-8 mb-8 shadow-lg transform hover:scale-105 transition-transform duration-300">
+                <p className="text-yellow-900 font-bold text-3xl mb-3">
+                  🚀 Coming Soon!
+                </p>
+                <p className="text-yellow-800 text-lg font-medium">
+                  We're working hard to bring you an amazing audio practice experience.
+                </p>
+              </div>
+              
+              <div className="flex flex-wrap gap-2 justify-center">
+                <span className="bg-blue-100 text-blue-800 text-xs font-medium px-3 py-1 rounded-full">
+                  Voice Recognition
+                </span>
+                <span className="bg-green-100 text-green-800 text-xs font-medium px-3 py-1 rounded-full">
+                  Real-time Feedback
+                </span>
+                <span className="bg-purple-100 text-purple-800 text-xs font-medium px-3 py-1 rounded-full">
+                  Natural Conversation
+                </span>
+              </div>
+            </div>
           </Drawer>
         </div>
       </div>
